@@ -1,29 +1,33 @@
-const slider = document.querySelector('.items');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+function handleClick(event) {
+  // Get the current mouse position.
+  var mousePosition = event.clientX + event.clientY;
 
-    slider.addEventListener('mousedown', (event) => {
-        isDown = true;
-        slider.classList.add('active')
-        startX = event.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-    
-    slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active')
-    });
+  // Get the element that was clicked.
+  var clickedElement = event.target;
 
-    slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active')
-    });
+  // Set the element's draggable property to true.
+  clickedElement.draggable = true;
 
-    slider.addEventListener('mousemove', (event) => {
-        if (!isDown) return;
-        event.preventDefault();
-        const x = event.pageX - slider.offsetLeft;
-        const walk = (x - startX)*2;
-        slider.scrollLeft = scrollLeft - walk;
-    });
+  // Set the element's data-x and data-y attributes to the mouse position.
+  clickedElement.setAttribute('data-x', mousePosition.x);
+  clickedElement.setAttribute('data-y', mousePosition.y);
+}
+
+function handleDrag(event) {
+  // Get the current mouse position.
+  var mousePosition = event.clientX + event.clientY;
+
+  // Get the element that is being dragged.
+  var draggedElement = event.target;
+
+  // Set the element's position to the mouse position.
+  draggedElement.style.left = mousePosition.x - draggedElement.getAttribute('data-x');
+  draggedElement.style.top = mousePosition.y - draggedElement.getAttribute('data-y');
+}
+
+var cubes = document.querySelectorAll('.cube');
+
+for (var i = 0; i < cubes.length; i++) {
+  cubes[i].addEventListener('mousedown', handleClick);
+  cubes[i].addEventListener('drag', handleDrag);
+}
