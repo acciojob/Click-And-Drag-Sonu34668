@@ -1,33 +1,30 @@
-function handleClick(event) {
-  // Get the current mouse position.
-  var mousePosition = event.clientX + event.clientY;
+// Your code here.
+const slider = document.querySelector('.items');
+let isDown = false;
+let startX;
+let scrollLeft;
 
-  // Get the element that was clicked.
-  var clickedElement = event.target;
+slider.addEventListener('mousedown', (e) => {
+isDown = true;
+slider.classList.add('active');
+startX = e.pageX - slider.offsetLeft;
+scrollLeft = slider.scrollLeft;
+});
 
-  // Set the element's draggable property to true.
-  clickedElement.draggable = true;
+slider.addEventListener('mouseleave', () => {
+isDown = false;
+slider.classList.remove('active');
+});
 
-  // Set the element's data-x and data-y attributes to the mouse position.
-  clickedElement.setAttribute('data-x', mousePosition.x);
-  clickedElement.setAttribute('data-y', mousePosition.y);
-}
+slider.addEventListener('mouseup', () => {
+isDown = false;
+slider.classList.remove('active');
+});
 
-function handleDrag(event) {
-  // Get the current mouse position.
-  var mousePosition = event.clientX + event.clientY;
-
-  // Get the element that is being dragged.
-  var draggedElement = event.target;
-
-  // Set the element's position to the mouse position.
-  draggedElement.style.left = mousePosition.x - draggedElement.getAttribute('data-x');
-  draggedElement.style.top = mousePosition.y - draggedElement.getAttribute('data-y');
-}
-
-var cubes = document.querySelectorAll('.cube');
-
-for (var i = 0; i < cubes.length; i++) {
-  cubes[i].addEventListener('mousedown', handleClick);
-  cubes[i].addEventListener('drag', handleDrag);
-}
+slider.addEventListener('mousemove', (e) => {
+if (!isDown) return; // stop the fn from running
+e.preventDefault();
+const x = e.pageX - slider.offsetLeft;
+const walk = (x - startX) * 3;
+slider.scrollLeft = scrollLeft - walk;
+});
