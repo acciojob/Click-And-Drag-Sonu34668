@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -39,4 +39,62 @@
 </script>
 
   </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Click and Drag</title>
+<style>
+.cube {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+}
+
+.cube:hover {
+  background-color: #fff;
+}
+
+.cube .handle {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: move;
+}
+</style>
+</head>
+<body>
+<div class="cube">
+  <div class="handle"></div>
+</div>
+<script>
+document.addEventListener("mousedown", function(event) {
+  var cube = event.target;
+  cube.style.zIndex = 100;
+  var handle = cube.querySelector(".handle");
+  var x = event.clientX - handle.offsetLeft;
+  var y = event.clientY - handle.offsetTop;
+
+  function onMouseMove(event) {
+    var newX = event.clientX - x;
+    var newY = event.clientY - y;
+    cube.style.left = newX + "px";
+    cube.style.top = newY + "px";
+  }
+
+  document.addEventListener("mousemove", onMouseMove);
+});
+
+document.addEventListener("mouseup", function() {
+  document.removeEventListener("mousemove", onMouseMove);
+});
+</script>
+</body>
 </html>
